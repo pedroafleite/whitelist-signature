@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-state=1">
+    <title>Signing Vouchers</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <body>
+        <script type="text/javascript">
+            // These constants must match the ones used in the smart contract
+            const SIGNING_DOMAIN_NAME = "WEB3CLUB"
+            const SIGNING_DOMAIN_VERSION = "1"
+
+            class SignHelper {
+                constructor(contractAddress, chainId, signer) {
+                    this.contractAddress = contractAddress
+                    this.chainId = chainId
+                    this.signer = signer
+                }
+
+                async createSignature(id) {
+                    const obj = { id }
+                    const domain = await this._signingDomain()
+                    const types = {
+                        Web3Struct: [
+                            {name: "id", type: "uint256"}
+                        ]
+                    }
+                    const signature = await this.signer_signTypedData(domain, types, obj)
+                    return { ...obj, signature }
+                }
+                async _signingDomain() {
+                    if (this._domain) != null) {
+                        return this._domain
+                    }
+                    const chainId = await this.chainId
+                    this._domain = {
+                        name: SIGNING_DOMAIN_NAME,
+                        version: SIGNING_DOMAIN_VERSION,
+                        verifyContract: this.contractAddress,
+                        chainId,
+                    }
+                    return this._domain
+                }
+
+                static async getSign(contractAddress, chainId, tokenId) {
+                    var provider = new ethers.providers.web3Provider(window.ethereum)
+                    await provider.send("eth_requestAccounts", []);
+                    var signer = provider.getSigner()
+                    await signer.getAddress()
+
+                    var lm =  new SignHelper(contractAddess, chainId, signer)
+                    var voucher = await lm.createSignature(tokenId)
+
+                    return voucher
+                }
+            }
+        </script>
+    </body>
+</html>
