@@ -2,7 +2,7 @@
 <html>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-state=1">
-    <title>Signing Vouchers</title>
+    <title>Signing Vouchers 2</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
     <body>
         <script type="text/javascript">
@@ -17,42 +17,47 @@
                     this.signer = signer
                 }
 
-                async createSignature(id) {
-                    const obj = { id }
+                async createSignature(id, message) {
+                    const obj = { id, message }
                     const domain = await this._signingDomain()
                     const types = {
                         Web3Struct: [
-                            {name: "id", type: "uint256"}
+                            {name: "id", type: "uint256"},
+                            {name: "message", type: "string"}
                         ]
                     }
-                    const signature = await this.signer_signTypedData(domain, types, obj)
+                    const signature = await this.signer._signTypedData(domain, types, obj)
                     return { ...obj, signature }
                 }
                 async _signingDomain() {
-                    if (this._domain) != null) {
+                    if (this._domain != null) {
                         return this._domain
                     }
                     const chainId = await this.chainId
                     this._domain = {
                         name: SIGNING_DOMAIN_NAME,
                         version: SIGNING_DOMAIN_VERSION,
-                        verifyContract: this.contractAddress,
+                        verifyingContract: this.contractAddress,
                         chainId,
                     }
                     return this._domain
                 }
 
-                static async getSign(contractAddress, chainId, tokenId) {
-                    var provider = new ethers.providers.web3Provider(window.ethereum)
+                static async getSign(contractAddress, chainId, tokenId, message) {
+                    var provider = new ethers.providers.Web3Provider(window.ethereum)
                     await provider.send("eth_requestAccounts", []);
                     var signer = provider.getSigner()
                     await signer.getAddress()
 
-                    var lm =  new SignHelper(contractAddess, chainId, signer)
-                    var voucher = await lm.createSignature(tokenId)
+                    var lm =  new SignHelper(contractAddress, chainId, signer)
+                    var voucher = await lm.createSignature(tokenId, message)
 
                     return voucher
                 }
+
+                // export class SignHelper {}
+
+                // window.SignHelper = SignHelper;
             }
         </script>
     </body>
