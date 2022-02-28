@@ -3,28 +3,27 @@
 pragma solidity ^0.8.2;
 
 import "@openzeppelin/contracts@4.4.1/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts@4.4.1/access/Ownable.sol";
 import "@openzeppelin/contracts@4.4.1/utils/Counters.sol";
 import "@openzeppelin/contracts@4.4.1/utils/cryptography/ECDSA.sol";
 import "@openzeppelin/contracts@4.4.1/utils/cryptography/draft-EIP712.sol";
 
-contract MyToken is ERC721, EIP712, Ownable {
+contract MyNFT is ERC721, EIP712 {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
     string private constant SIGNING_DOMAIN = "WEB3CLUB";
     string private constant SIGNATURE_VERSION = "1";
-    mapping (uint256 => bool) public redeemed;
+    mapping (address => bool) public redeemed;
 
-    constructor() ERC721("My Token", "MTK") EIP712(SIGNING_DOMAIN, SIGNATURE_VERSION) {}
+    constructor() ERC721("My NFT", "NFT") EIP712(SIGNING_DOMAIN, SIGNATURE_VERSION) {}
 
-    function safeMint(address to, uint256 id, string memory message, bytes memory signature) public {
-        require(check(id, message, signature) == owner(), "Voucher invalid");
-        require(redeemed[id] != true, "Already redeemed");
+    function safeMint(uint256 id, string memory message, bytes memory signature) public {
+        require(check(id, message, signature) == msg.sender, "Voucher invalid");
+        require(!redeemed[msg.sender], "Already redeemed");
         _tokenIdCounter.increment();
         uint256 tokenId = _tokenIdCounter.current();
-        _safeMint(to, tokenId);
-        redeemed[id] = true;
+        _safeMint(msg.sender, tokenId);
+        redeemed[msg.sender] = true;
     }
 
     function check(uint256 id, string memory message, bytes memory signature) public view returns (address) {
