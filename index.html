@@ -2,7 +2,7 @@
 <html>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-state=1">
-    <title>Signing Vouchers 2</title>
+    <title>Signing to Whitelist</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
     <body>
         <script type="text/javascript">
@@ -10,6 +10,7 @@
             const SIGNING_DOMAIN_NAME = "WEB3CLUB"
             const SIGNING_DOMAIN_VERSION = "1"
 
+            const whitelist = [];
 
             class SignHelper {
                 constructor(contractAddress, chainId, signer) {
@@ -45,13 +46,14 @@
                 }
 
                 static async getSign(contractAddress, chainId, tokenId, message) {
-                    var provider = new ethers.providers.Web3Provider(window.ethereum)
+                    const provider = new ethers.providers.Web3Provider(window.ethereum)
                     await provider.send("eth_requestAccounts", []);
-                    var signer = provider.getSigner()
-                    await signer.getAddress()
+                    const signer = provider.getSigner()
+                    const signerAddress = await signer.getAddress()
+                    whitelist.push(signerAddress)
 
-                    var lm =  new SignHelper(contractAddress, chainId, signer)
-                    var voucher = await lm.createSignature(tokenId, message)
+                    const lm =  new SignHelper(contractAddress, chainId, signer)
+                    const voucher = await lm.createSignature(tokenId, message)
 
                     return voucher
                 }
