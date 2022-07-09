@@ -1,5 +1,7 @@
 # Offchain Whitelist
 
+![alt text for screen readers](/path/to/image.png "Text to show on mouseover")
+
 ```shell
 npx hardhat accounts
 npx hardhat compile
