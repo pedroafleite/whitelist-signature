@@ -1,8 +1,9 @@
 const hre = require("hardhat");
 
 async function main() {
-  const SignWhitelist = await hre.ethers.getContracnptFactory("SignWhitelist");
-  const signWhitelist = await SignWhitelist.deploy("Hello, Hardhat!");
+  const SignWhitelist = await hre.ethers.getContractFactory("SignWhitelist");
+  console.log("Deploying contract...")
+  const signWhitelist = await SignWhitelist.deploy()
 
   await signWhitelist.deployed();
 
