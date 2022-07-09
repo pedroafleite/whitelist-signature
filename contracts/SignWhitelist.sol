@@ -2,12 +2,12 @@
 
 pragma solidity ^0.8.2;
 
-import "@openzeppelin/contracts@4.4.1/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts@4.4.1/utils/Counters.sol";
-import "@openzeppelin/contracts@4.4.1/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts@4.4.1/utils/cryptography/draft-EIP712.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/draft-EIP712.sol";
 
-contract MyNFT is ERC721, EIP712 {
+contract SignWhitelist is ERC721, EIP712 {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
