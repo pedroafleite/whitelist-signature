@@ -1,6 +1,6 @@
 # Offchain Whitelist
 
-![alt text for screen readers](/path/to/image.png "Text to show on mouseover")
+![Whitelist using signatures](https://raw.githubusercontent.com/pedroafleite/whitelist-signature/main/images/diagram.drawio.png "Whitelist using signatures")
 
 ```shell
 npx hardhat accounts
